@@ -18,6 +18,10 @@ Testing is performed using the Jest testing framework with Enzyme to test React 
 
 # CRUD API
 Create/POST: '/api/listings/:homeId'
+
 Read/GET: '/api/listings/:homeId'
+
 Update/PUT: '/api/listings/:homeId'
+
 Delete/DELETE: '/api/listings/:homeId'
+
