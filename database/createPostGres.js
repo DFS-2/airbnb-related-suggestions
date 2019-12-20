@@ -8,21 +8,21 @@ let pool = new Pool({
 })
 
 pool.query(`CREATE DATABASE homes;`)
-.catch( (err) => {
-    console.log("Error creating database...", err)  
-})
-.then( () => {
-    pool.end()
-    pool = new Pool( {
-        user: 'divyankasalona',
-        host: 'localhost',
-        database: 'homes',
-        password: null
+    .catch((err) => {
+        console.log("Error creating database...", err)
     })
-    console.log("Connection established!")
-})
-.then ( () => {
-    pool.query(`CREATE TABLE IF NOT EXISTS homeTable (
+    .then(() => {
+        pool.end()
+        pool = new Pool({
+            user: 'divyankasalona',
+            host: 'localhost',
+            database: 'homes',
+            password: null
+        })
+        console.log("Connection established!")
+    })
+    .then(() => {
+        pool.query(`CREATE TABLE IF NOT EXISTS homeTable (
         id integer PRIMARY KEY,
         title text,
         price numeric,
@@ -32,22 +32,37 @@ pool.query(`CREATE DATABASE homes;`)
         numBeds integer,
         city text
     );`)
-})
-.then ( () => {
-    console.log("Homes table was successfully created!")
-    pool.query(`CREATE TABLE IF NOT EXISTS photos (
+    })
+    .then(() => {
+        console.log("Homes table was successfully created!")
+        pool.query(`CREATE TABLE IF NOT EXISTS photos (
         id integer PRIMARY KEY,
         photoURL text,
         home_id integer,
         FOREIGN KEY (home_id) REFERENCES homeTable(id)
     );`)
-})
-.then( () => {
-    console.log("Photos was successfully created!")
-})
-.catch( (err) => {
-    console.log("Error creating tables...", err)
-})
+    })
+    .then(() => {
+        console.log("Photos was successfully created!")
+        pool.query(`CREATE TABLE IF NOT EXISTS users (
+        id integer PRIMARY KEY,
+        name text
+    );`)
+    })
+    .then(() => {
+        console.log("Users was successfully created!")
+        pool.query(`CREATE TABLE IF NOT EXISTS users (
+        id integer PRIMARY KEY,
+        home_id integer,
+        user_id integer,
+        FOREIGN KEY (home_id) REFERENCES homes(id),
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    );`)
+    })
+
+    .catch((err) => {
+        console.log("Error creating tables...", err)
+    })
 
 
 // const client = new Client({
