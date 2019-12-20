@@ -8,7 +8,8 @@
     "build": "webpack --mode=production",
     "start": "nodemon --inspect ./server/",
     "db:pre-migrate": "node ./database/create.js",
-    "db:seed": "npm run db:pre-migrate && node ./database/seed.js"
+    "db:seed": "npm run db:pre-migrate && node ./database/seed.js",
+    "db:pg-create": "node ./database/createPostGres.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
     "babel-loader": "^8.0.6",
+    "pg": "^7.15.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
