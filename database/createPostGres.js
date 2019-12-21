@@ -11,6 +11,7 @@ pool.query(`CREATE DATABASE homes;`)
     .catch((err) => {
         console.log("Error creating database...", err)
     })
+
     .then(() => {
         pool.end()
         pool = new Pool({
@@ -22,8 +23,20 @@ pool.query(`CREATE DATABASE homes;`)
         console.log("Connection established!")
     })
     .then(() => {
-        pool.query(`CREATE TABLE IF NOT EXISTS homeTable (
-        id integer PRIMARY KEY,
+        return pool.query(`DROP TABLE IF EXISTS userfavoritehomes;`)
+    })
+    .then(() => {
+        return pool.query(`DROP TABLE IF EXISTS photos;`)
+    })
+    .then(() => {
+        return pool.query(`DROP TABLE IF EXISTS homeTable;`)
+    })
+    .then(() => {
+        return pool.query(`DROP TABLE IF EXISTS users;`)
+    })
+    .then(() => {
+        return pool.query(`CREATE TABLE homeTable (
+        id SERIAL PRIMARY KEY,
         title text,
         price numeric,
         numReviews integer,
@@ -35,8 +48,8 @@ pool.query(`CREATE DATABASE homes;`)
     })
     .then(() => {
         console.log("Homes table was successfully created!")
-        pool.query(`CREATE TABLE IF NOT EXISTS photos (
-        id integer PRIMARY KEY,
+        return pool.query(`CREATE TABLE photos (
+        id SERIAL PRIMARY KEY,
         photoURL text,
         home_id integer,
         FOREIGN KEY (home_id) REFERENCES homeTable(id)
@@ -44,24 +57,26 @@ pool.query(`CREATE DATABASE homes;`)
     })
     .then(() => {
         console.log("Photos was successfully created!")
-        pool.query(`CREATE TABLE IF NOT EXISTS users (
-        id integer PRIMARY KEY,
+        return pool.query(`CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
         name text
     );`)
     })
+    .catch((err) => {
+        console.log("Error creating initial tables...", err)
+    })
     .then(() => {
         console.log("Users was successfully created!")
-        pool.query(`CREATE TABLE IF NOT EXISTS users (
-        id integer PRIMARY KEY,
+        return pool.query(`CREATE TABLE userfavoritehomes (
+        id SERIAL PRIMARY KEY,
         home_id integer,
         user_id integer,
-        FOREIGN KEY (home_id) REFERENCES homes(id),
+        FOREIGN KEY (home_id) REFERENCES homeTable(id),
         FOREIGN KEY (user_id) REFERENCES users(id)
     );`)
     })
-
     .catch((err) => {
-        console.log("Error creating tables...", err)
+        console.log("Error creating join table...", err)
     })
 
 
