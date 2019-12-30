@@ -27,6 +27,7 @@
     "faker": "^4.1.0",
     "pg": "^7.15.1",
     "progress": "^2.0.3",
+    "progressbar": "^1.3.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",

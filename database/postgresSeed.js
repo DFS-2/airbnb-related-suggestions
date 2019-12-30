@@ -3,6 +3,7 @@ const Promise = require('bluebird');
 const request = require('request');
 var convert = require('xml-js');
 var faker = require('faker');
+const progress = require('progressbar');
 
 
 let pool = new Pool({
@@ -12,7 +13,7 @@ let pool = new Pool({
     password: null,
 })
 let images = [];
-var options = {ignoreComment: true, alwaysChildren: true};
+var options = { ignoreComment: true, alwaysChildren: true };
 
 // for(let i = 0; i < 1; i++) {    
 //     request("https://airbnbroomimages.s3-us-west-1.amazonaws.com", (error, response, body) => {
@@ -22,17 +23,57 @@ var options = {ignoreComment: true, alwaysChildren: true};
 //     })
 // }
 
-let numUsers = 1000000;
+let numUsers = 10000000;
 
-let userQueries = [];
+let queries = []
 let insertQuery = `INSERT INTO users (name) VALUES`
-for(var i = 0; i < numUsers; i++) {
-    insertQuery += `('${faker.name.findName().replace("'", "")}'),`
-    // console.log(insertQuery)
+let progressTables = progress.create().step("seeding tables...")
+progressTables.setTotal(30000);
+for (var i = 0; i < numUsers+1; i++) {
+    if(i%1000 === 0) {
+        insertQuery += `('${faker.lorem.word()}');`
+        pool.query(insertQuery)
+        .then( () => {
+            progressTables.addTick()
+        })
+        insertQuery = `INSERT INTO users (name) VALUES`
+
+    } else {
+        insertQuery += `('${faker.lorem.word()}'),`
+    }
+
 }
-insertQuery += `('${faker.name.findName().replace("'", "")}');`
-// console.log(insertQuery)
-pool.query( insertQuery )
+// insertQuery += `('${faker.lorem.word()}');`
+pool.query(insertQuery)
+    .catch((err) => {
+        console.log("Error seeding users...", err)
+    })
+    .then(() => {
+        console.log("Completed users table")
+        insertQuery = `INSERT INTO homeTable (title, price, numReviews, rating, type, numBeds, city) VALUES`
+        for (var i = 0; i < numUsers * 2 + 1; i++) {
+            insertQuery += `('${faker.lorem.word()}',${faker.random.number()}, ${faker.random.number()} , ${faker.random.number()}, ${faker.lorem.word()}, ${faker.random.number()}, ${faker.lorem.word()} ),`
+        }
+        insertQuery += `('${faker.lorem.word()}',${faker.random.number()}, ${faker.random.number()} , ${faker.random.number()}, ${faker.lorem.word()}, ${faker.random.number()}, ${faker.lorem.word()} );`
+    })
+    .catch((err) => {
+        console.log("Error seeding homeTable...", err)
+    })
+    .then(() => {
+        progressTables.addTick()
+        insertQuery = `INSERT INTO homeTable (title, price, numReviews, rating, type, numBeds, city) VALUES`
+        for (var i = 0; i < numUsers * 2 + 1; i++) {
+            insertQuery += `('${faker.lorem.word()}',${faker.random.number()}, ${faker.random.number()} , ${faker.random.number()}, ${faker.lorem.word()}, ${faker.random.number()}, ${faker.lorem.word()} ),`
+        }
+        insertQuery += `('${faker.lorem.word()}',${faker.random.number()}, ${faker.random.number()} , ${faker.random.number()}, ${faker.lorem.word()}, ${faker.random.number()}, ${faker.lorem.word()} );`
+
+
+    })
+    .then( () => {
+        progressTables.addTick()
+        insertQuery = `INSERT INTO homeTable (title, price, numReviews, rating, type, numBeds, city) VALUES`
+        progressTables.finish()
+    })
 
 
 
