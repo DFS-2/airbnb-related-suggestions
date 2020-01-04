@@ -1,3 +1,7 @@
 /node_modules/
 /config/
 /coverage/
+/users.csv
+/photos.csv
+/homes.csv
+/newrelic_agent.log

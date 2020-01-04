@@ -10,7 +10,8 @@
     "db:pre-migrate": "node ./database/create.js",
     "db:seed": "npm run db:pre-migrate && node ./database/seed.js",
     "db:pg-create": "node ./database/createPostGres.js",
-    "db:pg-seed": "node ./database/postgresSeed.js"
+    "db:pg-seed": "node ./database/postgresSeed.js",
+    "db:mongo-seed": "node ./database/mongoSeed.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,10 @@
     "@babel/preset-react": "^7.7.4",
     "babel-loader": "^8.0.6",
     "faker": "^4.1.0",
+    "fs": "0.0.1-security",
+    "mongodb": "^3.4.1",
+    "mongodb-core": "^3.2.7",
+    "newrelic": "^6.2.0",
     "pg": "^7.15.1",
     "progress": "^2.0.3",
     "progressbar": "^1.3.0",

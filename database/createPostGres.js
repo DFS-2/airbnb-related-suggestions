@@ -51,8 +51,8 @@ pool.query(`CREATE DATABASE homes;`)
         return pool.query(`CREATE TABLE photos (
         id SERIAL PRIMARY KEY,
         photoURL text,
-        home_id integer,
-        FOREIGN KEY (home_id) REFERENCES homeTable(id)
+        home_id integer
+        
     );`)
     })
     .then(() => {

@@ -1,3 +1,5 @@
+require('newrelic');
+
 const express = require('express');
 const router = require('./router.js');
 const path = require('path');
