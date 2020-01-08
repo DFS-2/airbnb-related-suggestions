@@ -10,10 +10,10 @@ const Promise = require('bluebird');
 
 router.get('/somelistings', (req, res, next) => {
   var randomDraw = helper.randomize(100);
-  console.log("get request for listings");
+  // console.log("get request for listings");
   db.findMultiple(randomDraw)
     .then((data) => {
-      console.log('data retrieved!');
+      // console.log('data retrieved!');
       res.write(JSON.stringify(data));
       res.status(200).end();
     }).catch((err) => {
@@ -25,7 +25,7 @@ router.get('/somelistings', (req, res, next) => {
 router.get('/reqFromClient/:homeId', (req, res, next) => {
   var homeId = req.params.homeId;
   // generate random number based on seed
-  console.log("get request for homeId");
+  // console.log("get request for homeId");
   var randomDraw = helper.randomize(100);
   db.findMultiple(randomDraw)
     .then((data) => {

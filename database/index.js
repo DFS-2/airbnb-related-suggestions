@@ -143,7 +143,6 @@ let pool = new Pool({
 let findMultiple = (arrayOfRandomNumbers) => {
   const homeFindAll = pool.query(`SELECT * FROM homeTable WHERE id = ANY('{${arrayOfRandomNumbers}}'::int[]);`);
   const photoFindAll = pool.query(`SELECT * FROM photos WHERE home_id = ANY('{${arrayOfRandomNumbers}}'::int[]);`);  
-  console.log("Finished select statements!", homeFindAll, photoFindAll)
   // homeFindAll
   // .then( (data) => {
   //   console.log(data);
@@ -153,18 +152,17 @@ let findMultiple = (arrayOfRandomNumbers) => {
               console.log("error with returned data...", err)
             })
             .then((data) => {
-              console.log("all data", data)
               const homes = data[0].rows;
               const photos = data[1].rows;
               const resultArray = [];
-              console.log("home data", homes)
-              console.log("photos data", photos)
+              // console.log("home data", homes)
+              // console.log("photos data", photos)
               for (var home of homes) {
-                console.log("Homes ", home);
+                // console.log("Homes ", home);
                 const singleHomeInfo = {...home};
                 const interiorPicLinks = [];
                 for (photo of photos) {
-                  console.log("photos ", photo);
+                  // console.log("photos ", photo);
                   if (photo.home_id === home.id) {
                     interiorPicLinks.push(photo.photoURL);
                   }
